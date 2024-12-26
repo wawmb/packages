@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=jansson
-PKG_VERSION:=2.12
+PKG_VERSION:=2.13.1
 PKG_RELEASE:=1
 PKG_LICENSE:=MIT
 
