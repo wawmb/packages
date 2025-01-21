@@ -6,12 +6,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libdrm
-PKG_VERSION:=2.4.97
+PKG_VERSION:=2.4.100
 PKG_RELEASE:=1
 
 PKG_SOURCE_URL:=https://dri.freedesktop.org/libdrm
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_HASH:=77d0ccda3e10d6593398edb70b1566bfe1a23a39bd3da98ace2147692eadd123
+PKG_HASH:=c77cc828186c9ceec3e56ae202b43ee99eb932b4a87255038a80e8a1060d0a5d
 
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1
@@ -65,6 +65,9 @@ define Package/libdrm/install
 	$(CP) \
 	  $(PKG_INSTALL_DIR)/usr/lib/*.so* \
 	  $(1)/usr/lib/
+
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/tests/modetest/.libs/modetest $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,libdrm))
