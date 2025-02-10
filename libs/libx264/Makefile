@@ -39,8 +39,6 @@ ifneq ($(findstring cortex-a,$(CPU_TYPE)),)
       MAKE_FLAGS+= AS=nasm
     endif
     else
-    CONFIGURE_VARS+= AS=
-    MAKE_FLAGS+= AS=
     CONFIGURE_ARGS += --disable-asm
   endif
 endif
