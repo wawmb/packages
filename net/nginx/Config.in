@@ -267,4 +267,13 @@ config NGINX_TS_MODULE
 		Add support for MPEG-TS Live Module module.
 	default n
 
+config NGINX_HTTP_FLV_MODULE
+	bool
+	prompt "Enable HTTP_FLV module"
+	depends on NGINX_SSL
+	help
+		Add support for NGINX_HTTP_FLV_MODULE Server.
+		DASH enhanced - https://github.com/winshining/nginx-http-flv-module
+	default n
+
 endmenu

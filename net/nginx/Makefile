@@ -70,6 +70,7 @@ PKG_CONFIG_DEPENDS := \
 	CONFIG_NGINX_STREAM_SSL_MODULE \
 	CONFIG_NGINX_STREAM_SSL_PREREAD_MODULE \
 	CONFIG_NGINX_RTMP_MODULE \
+	CONFIG_NGINX_HTTP_FLV_MODULE \
 	CONFIG_NGINX_TS_MODULE \
 	CONFIG_OPENSSL_ENGINE \
 	CONFIG_OPENSSL_WITH_NPN
@@ -294,6 +295,9 @@ ifneq ($(BUILD_VARIANT),all-module)
   ifeq ($(CONFIG_NGINX_RTMP_MODULE),y)
     ADDITIONAL_MODULES += --add-module=$(PKG_BUILD_DIR)/nginx-rtmp
   endif
+  ifeq ($(CONFIG_NGINX_HTTP_FLV_MODULE),y)
+    ADDITIONAL_MODULES += --add-module=$(PKG_BUILD_DIR)/nginx-http-flv
+  endif
   ifeq ($(CONFIG_NGINX_TS_MODULE),y)
     ADDITIONAL_MODULES += --add-module=$(PKG_BUILD_DIR)/nginx-ts
   endif
@@ -301,6 +305,7 @@ else
   CONFIG_NGINX_HEADERS_MORE:=y
   CONFIG_NGINX_HTTP_BROTLI:=y
   CONFIG_NGINX_RTMP_MODULE:=y
+  CONFIG_NGINX_HTTP_FLV_MODULE:=y
   CONFIG_NGINX_TS_MODULE:=y
   CONFIG_NGINX_NAXSI:=y
   CONFIG_NGINX_LUA:=y
@@ -313,6 +318,7 @@ else
 	--with-http_secure_link_module --with-http_sub_module --add-module=$(PKG_BUILD_DIR)/nginx-headers-more \
 	--with-stream --with-stream_ssl_module --with-stream_ssl_preread_module \
 	--add-module=$(PKG_BUILD_DIR)/nginx-brotli --add-module=$(PKG_BUILD_DIR)/nginx-rtmp \
+	--add-module=$(PKG_BUILD_DIR)/nginx-http-flv \
 	--add-module=$(PKG_BUILD_DIR)/nginx-ts --add-module=$(PKG_BUILD_DIR)/nginx-ubus-module
   config_files += koi-utf koi-win win-utf fastcgi_params 
 endif
@@ -412,6 +418,7 @@ define Build/Prepare
 	$(Prepare/nginx-brotli)
 	$(Prepare/nginx-headers-more)
 	$(Prepare/nginx-rtmp)
+	$(Prepare/nginx-http-flv)
 	$(Prepare/nginx-ts)
 	$(Prepare/nginx-dav-ext-module)
 	$(Prepare/nginx-ubus-module)
@@ -471,6 +478,22 @@ ifeq ($(CONFIG_NGINX_RTMP_MODULE),y)
   endef
 endif
 
+ifeq ($(CONFIG_NGINX_HTTP_FLV_MODULE),y)
+  define Download/nginx-http-flv
+    VERSION:=e8a456df874e6c465f07e4a7ea57b0ac8f0e8c44
+    SUBDIR:=nginx-http-flv
+    FILE:=nginx-http-flv-module-$$(VERSION).tar.xz
+    URL:=https://github.com/winshining/nginx-http-flv-module.git
+    MIRROR_HASH:=95ff73b3ece2aca5a1d8ed83e089eea1b5c8669d8bf1d7caf6c49aa830db6bed
+    PROTO:=git
+  endef
+  $(eval $(call Download,nginx-http-flv))
+
+  define  Prepare/nginx-http-flv
+	$(eval $(Download/nginx-http-flv))
+	xzcat $(DL_DIR)/$(FILE) | tar -C $(PKG_BUILD_DIR) $(TAR_OPTIONS)
+  endef
+endif
 
 ifeq ($(CONFIG_NGINX_TS_MODULE),y)
   define Download/nginx-ts
